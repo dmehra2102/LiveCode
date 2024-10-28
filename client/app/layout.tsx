@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import Header from "@/components/Header";
+import { Toaster } from "@/components/ui/toaster";
 import { calSans, firaCode, inter, playwriteEngland } from "./fonts";
 
 export const metadata: Metadata = {
@@ -19,7 +20,8 @@ export default function RootLayout({
         className={`${inter.variable} ${calSans.variable} ${firaCode.variable} ${playwriteEngland.className} antialiased relative`}
       >
         <Header />
-        <div className="pt-16">{children}</div>
+        <main className="pt-16">{children}</main>
+        <Toaster />
       </body>
     </html>
   );

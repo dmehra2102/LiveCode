@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import CreateRoomModal from "./CreateRoomModal";
 
 const HomePage = () => {
   return (
@@ -22,13 +23,15 @@ const HomePage = () => {
 
       {/* Buttons */}
       <div className="w-full flex mt-1 items-center gap-4 justify-center">
-        <Button
-          className="font-code text-lg sm:text-xl  bg-violet-800"
-          size={"2xl"}
-          variant={"outline"}
-        >
-          Create a Room
-        </Button>
+        <CreateRoomModal>
+          <Button
+            className="font-code text-lg sm:text-xl  bg-violet-800"
+            size={"2xl"}
+            variant={"outline"}
+          >
+            Create a Room
+          </Button>
+        </CreateRoomModal>
       </div>
 
       {/* Image */}
