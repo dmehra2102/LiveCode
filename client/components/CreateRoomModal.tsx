@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { LoaderCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,14 +14,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;
 };
 
+interface RoomDataPayload {
+  userName: string;
+  roomName: string;
+}
+
 const CreateRoomModal = ({ children }: Props) => {
+  const router = useRouter();
+  const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [roomData, setRoomData] = useState<RoomDataPayload>({
+    userName: "",
+    roomName: "",
+  });
+
+  const handleCreateRoom = () => {
+    setOpen(false);
+    router.push("/live/2099jkks300-39ejdsmn3");
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
@@ -31,12 +53,16 @@ const CreateRoomModal = ({ children }: Props) => {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="userName" className="text-right">
               Your Name
             </Label>
             <Input
-              id="name"
-              defaultValue="Deepanshu Mehra"
+              id="userName"
+              placeholder="Deepanshu Mehra"
+              onChange={(e) =>
+                setRoomData((prev) => ({ ...prev, userName: e.target.value }))
+              }
+              value={roomData.userName}
               className="col-span-3"
             />
           </div>
@@ -46,13 +72,29 @@ const CreateRoomModal = ({ children }: Props) => {
             </Label>
             <Input
               id="roomName"
-              defaultValue="bug-fix"
+              placeholder="bug-fix"
+              onChange={(e) =>
+                setRoomData((prev) => ({ ...prev, roomName: e.target.value }))
+              }
+              value={roomData.roomName}
               className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit">Create Room</Button>
+          <Button
+            onClick={handleCreateRoom}
+            disabled={
+              isLoading ||
+              !roomData.roomName ||
+              !roomData.userName ||
+              !!(roomData.roomName && roomData.roomName.length < 3) ||
+              !!(roomData.userName && roomData.userName.length < 4)
+            }
+          >
+            {isLoading && <LoaderCircle className="animate-spin h-4 w-4 " />}
+            Create Room
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

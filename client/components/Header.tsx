@@ -1,9 +1,25 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
-import CreateRoomModal from "@/components/CreateRoomModal";
+"use client";
+
 import Image from "next/image";
+import CustomSelect from "./CustomSelect";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { languageList } from "@/constants/language-list";
+import CreateRoomModal from "@/components/CreateRoomModal";
 
 const Header = () => {
+  const pathname = usePathname();
+  const [isLanguageDropdownVisible, setIsLanguageDropdownVisible] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const path = pathname.split("/").filter((item) => item.length);
+    if (path && path.length === 2 && path.includes("live")) {
+      setIsLanguageDropdownVisible(true);
+    }
+  }, [pathname]);
+
   return (
     <div className="h-16 fixed w-full z-10 bg-black flex items-center justify-between px-6 py-2 border-b border-gray-700">
       <div className="flex items-center gap-2">
@@ -20,7 +36,14 @@ const Header = () => {
         </div>
       </div>
 
-      <div>
+      <div className="flex items-center gap-6">
+        {isLanguageDropdownVisible && (
+          <CustomSelect
+            itemList={languageList}
+            placeholder="Language"
+            selectLabelText="Select Language"
+          />
+        )}
         <CreateRoomModal>
           <Button className="bg-violet-700 font-code" size={"lg"}>
             Start Now
