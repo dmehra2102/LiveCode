@@ -5,18 +5,26 @@ import CustomSelect from "./CustomSelect";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { languageList } from "@/constants/language-list";
+import { useAppContext } from "@/contexts/AppContext";
 import CreateRoomModal from "@/components/CreateRoomModal";
+import { languageList, ProgrammingLanguage } from "@/constants/language-list";
 
 const Header = () => {
   const pathname = usePathname();
-  const [isLanguageDropdownVisible, setIsLanguageDropdownVisible] =
+  const [isLangDropdownVisible, setIsLangDropdownVisible] =
     useState<boolean>(false);
+  const { selectedLanguage, setSelectedLanguage } = useAppContext();
+
+  const handleLanguageChange = (value: string) => {
+    if (value) {
+      setSelectedLanguage(value as ProgrammingLanguage);
+    }
+  };
 
   useEffect(() => {
     const path = pathname.split("/").filter((item) => item.length);
     if (path && path.length === 2 && path.includes("live")) {
-      setIsLanguageDropdownVisible(true);
+      setIsLangDropdownVisible(true);
     }
   }, [pathname]);
 
@@ -37,18 +45,21 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-6">
-        {isLanguageDropdownVisible && (
+        {isLangDropdownVisible ? (
           <CustomSelect
             itemList={languageList}
+            value={selectedLanguage}
             placeholder="Language"
             selectLabelText="Select Language"
+            onChangeFn={handleLanguageChange}
           />
+        ) : (
+          <CreateRoomModal>
+            <Button className="bg-violet-700 font-code" size={"lg"}>
+              Start Now
+            </Button>
+          </CreateRoomModal>
         )}
-        <CreateRoomModal>
-          <Button className="bg-violet-700 font-code" size={"lg"}>
-            Start Now
-          </Button>
-        </CreateRoomModal>
       </div>
     </div>
   );

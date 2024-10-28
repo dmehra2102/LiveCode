@@ -10,15 +10,23 @@ import {
 } from "@/components/ui/select";
 
 interface Props {
+  value: string;
   placeholder: string;
   selectLabelText: string;
+  onChangeFn: (value: string) => void;
   itemList: { value: string; label: string; defaultCode: string }[];
 }
 
-const CustomSelect = ({ placeholder, selectLabelText, itemList }: Props) => {
+const CustomSelect = ({
+  value,
+  placeholder,
+  selectLabelText,
+  itemList,
+  onChangeFn,
+}: Props) => {
   return (
     <div>
-      <Select>
+      <Select onValueChange={onChangeFn} value={value}>
         <SelectTrigger className="w-[180px] border-[2px] border-purple-700">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

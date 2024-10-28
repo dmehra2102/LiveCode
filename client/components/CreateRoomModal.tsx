@@ -11,10 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useAppContext } from "@/contexts/AppContext";
 
 type Props = {
   children: React.ReactNode;
@@ -27,6 +28,7 @@ interface RoomDataPayload {
 
 const CreateRoomModal = ({ children }: Props) => {
   const router = useRouter();
+  const { setRoomId } = useAppContext();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [roomData, setRoomData] = useState<RoomDataPayload>({
@@ -35,8 +37,9 @@ const CreateRoomModal = ({ children }: Props) => {
   });
 
   const handleCreateRoom = () => {
+    setRoomId("8376ksdcncx-wesdn");
     setOpen(false);
-    router.push("/live/2099jkks300-39ejdsmn3");
+    router.push(`/live/8376ksdcncx-wesdn`);
   };
 
   return (
