@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { Editor } from "@monaco-editor/react";
-import CodeEditorSkeleton from "@/components/CodeEditorSkeleton";
 import { useAppContext } from "@/contexts/AppContext";
 import { languageList } from "@/constants/language-list";
+import CodeEditorSkeleton from "@/components/CodeEditorSkeleton";
 
 const CodeEditor = () => {
   const { selectedLanguage } = useAppContext();
