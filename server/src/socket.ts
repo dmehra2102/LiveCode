@@ -1,7 +1,8 @@
 import { Server } from "http";
+import { logger } from "@/utils/logger";
 import { Server as IoServer, ServerOptions } from "socket.io";
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "@/interfaces/socket.interface";
-import { logger } from "./utils/logger";
+import { roomService } from "./services/room.service";
 
 class SocketIo {
   private serverOptions: Partial<ServerOptions>;
@@ -43,13 +44,21 @@ class SocketIo {
   private registerEventHandlers() {
     this._io.on("connection", socket => {
       logger.info(`Client with id ${socket.id} has connected`);
+
+      socket.on("createRoom", async (room, username, callback) => {
+        const newRoom = await roomService.createRoom(room, username);
+        if (!newRoom) {
+          callback({ success: false, message: "Oops! Facing some issue while creating room for you. Please try after sometime." });
+        }
+
+        callback({ success: true, message: "Room created successfully.", data: newRoom });
+      });
     });
   }
 
   private initializeMiddleware(): void {
     this.io.use(async (socket, next) => {
       try {
-        // Add your authentication middleware here
         const token = socket.handshake.auth.token || socket.handshake.headers.authorization;
         if (!token) {
           throw new Error("Authentication failed - No token provided");

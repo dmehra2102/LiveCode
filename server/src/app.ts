@@ -41,6 +41,12 @@ class App {
         logger.info("Gracefully shutting down...");
 
         io.shutdown();
+
+        if (redisClient) {
+          await redisClient.disconnect();
+          logger.info("Redis client disconnected.");
+        }
+
         this.httpServer.close(err => {
           if (err) {
             logger.error("Error closing HTTP server:", err);
@@ -49,11 +55,6 @@ class App {
             logger.info("HTTP server closed.");
           }
         });
-
-        if (redisClient) {
-          await redisClient.disconnect();
-          logger.info("Redis client disconnected.");
-        }
 
         process.exit(0);
       };

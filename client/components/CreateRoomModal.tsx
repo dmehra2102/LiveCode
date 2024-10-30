@@ -37,9 +37,11 @@ const CreateRoomModal = ({ children }: Props) => {
   });
 
   const handleCreateRoom = () => {
-    setRoomId("8376ksdcncx-wesdn");
+    // setRoomId("8376ksdcncx-wesdn");
+
     setOpen(false);
-    router.push(`/live/8376ksdcncx-wesdn`);
+
+    // router.push(`/live/8376ksdcncx-wesdn`);
   };
 
   return (

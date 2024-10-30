@@ -1,3 +1,9 @@
+interface SocketResponseInterface {
+  success: boolean;
+  message: string;
+  data?: any | null;
+}
+
 interface ServerToClientEvents {
   userJoined: (username: string) => void;
   roomUpdate: (room: string, users: string[]) => void;
@@ -11,6 +17,7 @@ interface ClientToServerEvents {
   joinRoom: (room: string) => void;
   leaveRoom: (room: string) => void;
   editCodeAccess: (room: string, username: string) => void;
+  createRoom: (room: string, username: string, callback: (data: SocketResponseInterface) => void) => void;
 }
 
 interface InterServerEvents {
