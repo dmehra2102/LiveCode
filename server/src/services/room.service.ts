@@ -9,7 +9,7 @@ class RoomService {
 
   async createRoom(roomName: string, ownerName: string): Promise<string | null> {
     try {
-      const roomId = `${this.ROOM_PREFIX}${uuidv4()}`;
+      const roomId = `${this.ROOM_PREFIX}${roomName}-${uuidv4()}`;
       const roomData: RoomData = {
         roomId,
         roomName,
@@ -22,7 +22,6 @@ class RoomService {
         EX: this.ROOM_TTL,
       });
 
-      console.log("RoomData :", roomData);
       return roomId;
     } catch (error) {
       logger.error(`Error while creating room :`, error);
@@ -71,6 +70,11 @@ class RoomService {
     } catch (error) {
       logger.error(`Error while removing user from room :`, error);
     }
+  }
+
+  async getPaticipantsList(roomId: string) {
+    const room = await this.getRoomData(roomId);
+    return !room ? [] : room.participants;
   }
 }
 

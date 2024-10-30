@@ -13,7 +13,7 @@ export const SocketContext = createContext<SocketContextValue>({
 });
 
 // Custom hook to use the context
-export const useAppContext = () => {
+export const useSocketContext = () => {
   return useContext(SocketContext);
 };
 

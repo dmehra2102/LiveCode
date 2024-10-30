@@ -50,8 +50,12 @@ class SocketIo {
         if (!newRoom) {
           callback({ success: false, message: "Oops! Facing some issue while creating room for you. Please try after sometime." });
         }
-
         callback({ success: true, message: "Room created successfully.", data: newRoom });
+      });
+
+      socket.on("participantsList", async (roomId, callback) => {
+        const participants = await roomService.getPaticipantsList(roomId);
+        callback({ success: true, message: "ok", data: participants });
       });
     });
   }

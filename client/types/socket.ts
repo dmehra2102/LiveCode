@@ -18,9 +18,6 @@ export interface ClientToServerEvents {
   joinRoom: (room: string) => void;
   leaveRoom: (room: string) => void;
   editCodeAccess: (room: string, username: string) => void;
-  createRoom: (
-    room: string,
-    username: string,
-    callback: (data: SocketResponseInterface) => void
-  ) => void;
+  createRoom: (room: string, username: string, callback: (data: SocketResponseInterface) => void) => void;
+  participantsList: (roomId: string, callback: (data: SocketResponseInterface) => void) => void;
 }
