@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { calSans, firaCode, inter, playwriteEngland } from "./fonts";
 import { AppProvider } from "@/contexts/AppContext";
+import { SocketProvider } from "@/contexts/SocketContext";
 
 export const metadata: Metadata = {
   title: "LiveCode",
@@ -20,11 +21,12 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${calSans.variable} ${firaCode.variable} ${playwriteEngland.className} antialiased relative`}
       >
-        {" "}
-        <AppProvider>
-          <Header />
-          <main className="pt-16">{children}</main>
-        </AppProvider>
+        <SocketProvider>
+          <AppProvider>
+            <Header />
+            <main className="pt-16">{children}</main>
+          </AppProvider>
+        </SocketProvider>
         <Toaster />
       </body>
     </html>
