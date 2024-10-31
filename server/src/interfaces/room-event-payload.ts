@@ -5,6 +5,7 @@ export interface RoomData {
   roomName: string;
   owner: string;
   participants: string[];
+  pendingRequests: string[];
   createdAt: number;
 }
 

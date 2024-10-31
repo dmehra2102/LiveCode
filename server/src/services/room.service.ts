@@ -7,14 +7,15 @@ class RoomService {
   private readonly ROOM_PREFIX = "room:";
   private readonly ROOM_TTL = 2 * 60 * 60;
 
-  async createRoom(roomName: string, ownerName: string): Promise<string | null> {
+  async createRoom(roomName: string, ownerName: string): Promise<{ roomId: string; owner: string } | null> {
     try {
       const roomId = `${this.ROOM_PREFIX}${roomName}-${uuidv4()}`;
       const roomData: RoomData = {
         roomId,
         roomName,
-        owner: ownerName,
-        participants: [ownerName],
+        owner: `${ownerName}-${Date.now().toString()}`,
+        participants: [`${ownerName}-${Date.now().toString()}`],
+        pendingRequests: [],
         createdAt: Date.now(),
       };
 
@@ -22,7 +23,7 @@ class RoomService {
         EX: this.ROOM_TTL,
       });
 
-      return roomId;
+      return { roomId, owner: roomData.owner };
     } catch (error) {
       logger.error(`Error while creating room :`, error);
       return null;
@@ -41,7 +42,7 @@ class RoomService {
       if (!roomData.participants.includes(username) && ttl !== -2) {
         roomData = {
           ...roomData,
-          participants: [...roomData.participants, username],
+          participants: [...roomData.participants, `${username}-${Date.now().toString()}`],
         };
 
         await redis.redisClient.set(roomId, JSON.stringify(roomData), {

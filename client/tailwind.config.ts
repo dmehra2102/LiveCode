@@ -3,11 +3,7 @@ import defaultTheme, { fontFamily } from "tailwindcss/defaultTheme";
 
 const config: Config = {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./pages/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
@@ -70,6 +66,7 @@ const config: Config = {
         code: ["var(--font-fira-code)", ...fontFamily.mono],
         roboto: ["var(--font-roboto-mono)", ...fontFamily.mono],
         modak: ["Modak", ...defaultTheme.fontFamily.sans],
+        poppins: ["Poppins", "sans-serif"],
       },
     },
     screens: {

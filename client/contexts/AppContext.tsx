@@ -5,26 +5,29 @@ import { RoomData } from "@/types/socket";
 import { createContext, useContext, useState } from "react";
 
 type AppContextType = {
-  selectedLanguage: ProgrammingLanguage;
   roomId: string;
-  setRoomId: (id: string) => void;
-  setSelectedLanguage: (language: ProgrammingLanguage) => void;
   roomData: RoomData | null;
+  userStoredName: string | null;
+  setRoomId: (id: string) => void;
+  selectedLanguage: ProgrammingLanguage;
   setRoomData: (data: RoomData) => void;
+  setUserStoredName: (name: string) => void;
+  setSelectedLanguage: (language: ProgrammingLanguage) => void;
 };
 
 const defaultContextValues: AppContextType = {
-  selectedLanguage: ProgrammingLanguage.TYPESCRIPT,
   roomId: "",
-  setRoomId: () => {},
-  setSelectedLanguage: () => {},
   roomData: null,
+  setRoomId: () => {},
+  userStoredName: null,
   setRoomData: () => {},
+  setUserStoredName: () => {},
+  setSelectedLanguage: () => {},
+  selectedLanguage: ProgrammingLanguage.TYPESCRIPT,
 };
 
 const AppContext = createContext<AppContextType>(defaultContextValues);
 
-// Custom hook to use the context
 export const useAppContext = () => {
   return useContext(AppContext);
 };
@@ -36,8 +39,9 @@ interface Props {
 export const AppProvider = ({ children }: Props) => {
   const [roomId, setRoomId] = useState<string>("");
   const [roomData, setRoomData] = useState<RoomData | null>(null);
+  const [userStoredName, setUserStoredName] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState<ProgrammingLanguage>(ProgrammingLanguage.TYPESCRIPT);
 
-  const value = { selectedLanguage, roomId, setRoomId, setSelectedLanguage, roomData, setRoomData };
+  const value = { selectedLanguage, roomId, setRoomId, setSelectedLanguage, roomData, setRoomData, userStoredName, setUserStoredName };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

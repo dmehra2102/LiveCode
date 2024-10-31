@@ -5,6 +5,11 @@ export interface SocketResponseInterface {
   data?: any | null;
 }
 
+export type ClientSideParticipantList = {
+  userName: string;
+  storedName: string;
+};
+
 export interface RoomData {
   roomId: string;
   roomName: string;
@@ -19,6 +24,7 @@ export interface ServerToClientEvents {
   messageReceived: (message: { text: string; from: string }) => void;
   acceptJoinRequest: (room: string, username: string) => void;
   denyJoinRequest: (room: string, username: string) => void;
+  uniqueName: (name: string) => void;
 }
 
 export interface ClientToServerEvents {

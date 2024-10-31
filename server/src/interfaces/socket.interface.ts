@@ -14,8 +14,7 @@ interface ServerToClientEvents {
 
 interface ClientToServerEvents {
   sendMessage: (message: string) => void;
-  joinRoom: (room: string) => void;
-  leaveRoom: (room: string) => void;
+  leaveRoom: (roomId: string, userName: string) => void;
   editCodeAccess: (room: string, username: string) => void;
   createRoom: (room: string, username: string, callback: (data: SocketResponseInterface) => void) => void;
   participantsList: (roomId: string, callback: (data: SocketResponseInterface) => void) => void;

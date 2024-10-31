@@ -1,8 +1,9 @@
 import { Server } from "http";
 import { logger } from "@/utils/logger";
+import { roomEventsListener } from "./events/room.events";
+import { userEventsListener } from "./events/user.events";
 import { Server as IoServer, ServerOptions } from "socket.io";
 import { ClientToServerEvents, InterServerEvents, ServerToClientEvents, SocketData } from "@/interfaces/socket.interface";
-import { roomService } from "./services/room.service";
 
 class SocketIo {
   private serverOptions: Partial<ServerOptions>;
@@ -14,7 +15,6 @@ class SocketIo {
       this.initializeErrorHandling();
       this.initializeMiddleware();
       this.registerEventHandlers();
-      logger.info("Socket.IO server initialized successfully");
     } catch (error) {
       logger.error("Failed to initialize Socket.IO server:", error);
       throw new Error("Socket.IO initialization failed");
@@ -45,18 +45,8 @@ class SocketIo {
     this._io.on("connection", socket => {
       logger.info(`Client with id ${socket.id} has connected`);
 
-      socket.on("createRoom", async (room, username, callback) => {
-        const newRoom = await roomService.createRoom(room, username);
-        if (!newRoom) {
-          callback({ success: false, message: "Oops! Facing some issue while creating room for you. Please try after sometime." });
-        }
-        callback({ success: true, message: "Room created successfully.", data: newRoom });
-      });
-
-      socket.on("participantsList", async (roomId, callback) => {
-        const participants = await roomService.getPaticipantsList(roomId);
-        callback({ success: true, message: "ok", data: participants });
-      });
+      roomEventsListener.listen({ socket, io: this._io });
+      userEventsListener.listen({ socket, io: this._io });
     });
   }
 
@@ -64,13 +54,7 @@ class SocketIo {
     this.io.use(async (socket, next) => {
       try {
         const token = socket.handshake.auth.token || socket.handshake.headers.authorization;
-        if (!token) {
-          throw new Error("Authentication failed - No token provided");
-        }
-
-        // Verify token and attach user data to socket
-        // const user = await verifyToken(token);
-        // socket.data.user = user;
+        if (!token) throw new Error("Authentication failed - No token provided");
 
         next();
       } catch (error) {

@@ -1,15 +1,14 @@
 "use client";
 
+import { Button } from "./ui/button";
 import React, { useState } from "react";
 import { LoaderCircle } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useAppContext } from "@/contexts/AppContext";
 import { useSocketContext } from "@/contexts/SocketContext";
-import { convertSpacesToHyphens } from "@/lib/utils";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 type Props = {
   children: React.ReactNode;
@@ -17,30 +16,29 @@ type Props = {
 
 interface RoomDataPayload {
   userName: string;
-  roomName: string;
+  roomId: string;
 }
 
-const CreateRoomModal = ({ children }: Props) => {
-  const router = useRouter();
-  const { socket } = useSocketContext();
+const JoinRoomModal = ({ children }: Props) => {
   const { setRoomId } = useAppContext();
+  const { socket } = useSocketContext();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [roomData, setRoomData] = useState<RoomDataPayload>({
     userName: "",
-    roomName: "",
+    roomId: "",
   });
 
-  const handleCreateRoom = () => {
+  const handleJoinRoom = () => {
     setIsLoading(true);
     if (socket) {
-      socket.emit("createRoom", convertSpacesToHyphens(roomData.roomName), convertSpacesToHyphens(roomData.userName), response => {
-        setIsLoading(false);
-        if (response.data) {
-          setRoomId(response.data.roomId);
-          router.push(`/live/${response.data}`);
-        }
-      });
+      //   socket.emit("createRoom", convertSpacesToHyphens(roomData.roomName), convertSpacesToHyphens(roomData.userName), response => {
+      //     setIsLoading(false);
+      //     if (response.data) {
+      //       setRoomId(response.data);
+      //       router.push(`/live/${response.data}`);
+      //     }
+      //   });
     }
     setOpen(false);
   };
@@ -51,9 +49,9 @@ const CreateRoomModal = ({ children }: Props) => {
       <DialogContent className='sm:max-w-[500px]'>
         <DialogHeader>
           <DialogTitle className='font-heading bg-clip-text text-transparent bg-gradient-to-r from-primary to-black'>
-            Set Up Your Room
+            Join a Room
           </DialogTitle>
-          <DialogDescription className='mt-3'>Provide some details to personalize your room setup.</DialogDescription>
+          <DialogDescription className='mt-3'>Provide some details inorder to join room.</DialogDescription>
         </DialogHeader>
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
@@ -70,30 +68,30 @@ const CreateRoomModal = ({ children }: Props) => {
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='roomName' className='text-right'>
-              Room Name
+              Room Id
             </Label>
             <Input
               id='roomName'
-              placeholder='bug-fix'
+              placeholder='room:bug-fix-8765789ld73gd'
               onChange={e => setRoomData(prev => ({ ...prev, roomName: e.target.value }))}
-              value={roomData.roomName}
+              value={roomData.roomId}
               className='col-span-3'
             />
           </div>
         </div>
         <DialogFooter>
           <Button
-            onClick={handleCreateRoom}
+            onClick={handleJoinRoom}
             disabled={
               isLoading ||
-              !roomData.roomName ||
+              !roomData.roomId ||
               !roomData.userName ||
-              !!(roomData.roomName && roomData.roomName.length < 3) ||
+              !!(roomData.roomId && roomData.roomId.length < 8) ||
               !!(roomData.userName && roomData.userName.length < 4)
             }
           >
             {isLoading && <LoaderCircle className='animate-spin h-4 w-4 ' />}
-            Create Room
+            Join Room
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -101,4 +99,4 @@ const CreateRoomModal = ({ children }: Props) => {
   );
 };
 
-export default CreateRoomModal;
+export default JoinRoomModal;
