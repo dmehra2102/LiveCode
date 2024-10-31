@@ -1,21 +1,40 @@
-import React from "react";
-import { ChevronsUp } from "lucide-react";
+"use client";
+
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CodeEditor from "@/components/CodeEditor";
+import { useAppContext } from "@/contexts/AppContext";
+import { useSocketContext } from "@/contexts/SocketContext";
+import ParticipantSidebar from "@/components/ParticipantSidebar";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 
 const LiveRoom = () => {
-  return (
-    <div className="relative h-[calc(100vh-68px)] border overflow-hidden w-full">
-      <CodeEditor />
+  const router = useRouter();
+  const { socket } = useSocketContext();
+  const { roomId, setRoomData } = useAppContext();
 
-      <div
-        className="w-12 cursor-pointer absolute right-8 bottom-6 rounded-full flex items-center justify-center h-12"
-        style={{
-          background:
-            "radial-gradient(circle at 10% 20%, rgb(210, 36, 129) 0%, rgb(152, 75, 215) 90%)",
-        }}
-      >
-        <ChevronsUp color="black" size={26} />
-      </div>
+  useEffect(() => {
+    if (!roomId) router.push("/");
+
+    if (socket && roomId) {
+      socket.emit("participantsList", roomId, response => {
+        setRoomData(response.data);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomId]);
+
+  return (
+    <div className='relative h-[calc(100vh-68px)] overflow-hidden w-full'>
+      <ResizablePanelGroup direction='horizontal'>
+        <ResizablePanel defaultSize={80}>
+          <CodeEditor />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={20} maxSize={25}>
+          <ParticipantSidebar />
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 };

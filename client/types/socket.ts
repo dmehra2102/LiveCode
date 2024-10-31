@@ -5,6 +5,14 @@ export interface SocketResponseInterface {
   data?: any | null;
 }
 
+export interface RoomData {
+  roomId: string;
+  roomName: string;
+  owner: string;
+  participants: string[];
+  createdAt: number;
+}
+
 export interface ServerToClientEvents {
   userJoined: (username: string) => void;
   roomUpdate: (room: string, users: string[]) => void;

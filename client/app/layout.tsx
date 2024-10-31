@@ -17,17 +17,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${inter.variable} ${calSans.variable} ${firaCode.variable} ${playwriteEngland.className} antialiased relative`}
-      >
+    <html lang='en'>
+      <body className={`${inter.variable} ${calSans.variable} ${firaCode.variable} ${playwriteEngland.className} antialiased relative`}>
         <SocketProvider>
           <AppProvider>
             <Header />
-            <main className="pt-16">{children}</main>
+            <main className='pt-16'>{children}</main>
+            <Toaster />
           </AppProvider>
         </SocketProvider>
-        <Toaster />
       </body>
     </html>
   );

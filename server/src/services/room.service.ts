@@ -5,7 +5,7 @@ import { RoomData } from "@/interfaces/room-event-payload";
 
 class RoomService {
   private readonly ROOM_PREFIX = "room:";
-  private readonly ROOM_TTL = 24 * 60 * 60;
+  private readonly ROOM_TTL = 2 * 60 * 60;
 
   async createRoom(roomName: string, ownerName: string): Promise<string | null> {
     try {
@@ -74,7 +74,7 @@ class RoomService {
 
   async getPaticipantsList(roomId: string) {
     const room = await this.getRoomData(roomId);
-    return !room ? [] : room.participants;
+    return !room ? [] : room;
   }
 }
 
